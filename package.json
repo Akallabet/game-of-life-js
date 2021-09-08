@@ -21,7 +21,8 @@
   },
   "homepage": "https://github.com/Akallabet/game-of-life-js#readme",
   "dependencies": {
-    "jest": "^27.1.0"
+    "jest": "^27.1.0",
+    "ramda": "^0.27.1"
   },
   "devDependencies": {
     "@types/jest": "^27.0.1",

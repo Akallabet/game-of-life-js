@@ -42,7 +42,7 @@ it('getLiveNbrCells', () => {
     [1, 0, 1],
     [0, 0, 0],
   ]
-  const liveNbrCells = getLiveNbrCells(world, 1, 1)
+  const liveNbrCells = getLiveNbrCells([world, 1, 1])
 
   expect(liveNbrCells).toEqual(2)
 })
@@ -78,9 +78,9 @@ it('getLiveNbrCells Tshaped', () => {
     [0, 1, 0],
   ]
 
-  expect(getLiveNbrCells(world, 1, 0)).toEqual(4)
-  expect(getLiveNbrCells(world, 1, 2)).toEqual(4)
-  expect(getLiveNbrCells(world, 0, 1)).toEqual(3)
+  expect(getLiveNbrCells([world, 1, 0])).toEqual(4)
+  expect(getLiveNbrCells([world, 1, 2])).toEqual(4)
+  expect(getLiveNbrCells([world, 0, 1])).toEqual(3)
 })
 
 it('square with Yshape cells', () => {

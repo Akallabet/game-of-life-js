@@ -1,24 +1,24 @@
-import { addIndex, map } from 'ramda'
+const nghbrs = [
+  [0, -1],
+  [0, 1],
+  [-1, -1],
+  [-1, 0],
+  [-1, 1],
+  [1, -1],
+  [1, 0],
+  [1, 1],
+]
 
-const mapI = addIndex(map)
+const isAlive =
+  ([world, y, x]) =>
+  ([ny, nx]) =>
+    (world[y + ny] && world[y + ny][x + nx]) || 0
 
-const isAlive = (world, y, x) => (world[y] && world[y][x]) || 0
+export const getLiveNbrCells = (ctxt) =>
+  nghbrs.map(isAlive(ctxt)).reduce((sum, n) => sum + n, 0)
 
-export const getLiveNbrCells = (world, y, x) =>
-  isAlive(world, y, x - 1) +
-  isAlive(world, y, x + 1) +
-  isAlive(world, y - 1, x - 1) +
-  isAlive(world, y - 1, x) +
-  isAlive(world, y - 1, x + 1) +
-  isAlive(world, y + 1, x - 1) +
-  isAlive(world, y + 1, x) +
-  isAlive(world, y + 1, x + 1)
-
-const calcNextState = (cell, liveNbrCells) =>
-  (!cell && liveNbrCells === 3) || (cell && (liveNbrCells === 2 || liveNbrCells === 3)) ? 1 : 0
-
-const evolveCell = (world, y) => (cell, x) => calcNextState(cell, getLiveNbrCells(world, y, x))
-
-const evolveRow = (world) => (row, y) => mapI(evolveCell(world, y), row)
-
-export const evolve = (world) => mapI(evolveRow(world), world)
+const calcNextState = (liveNbrCells, cell) =>
+  liveNbrCells === 3 || (cell && liveNbrCells === 2) ? 1 : 0
+const evolveCell = (world, y) => (cell, x) => calcNextState(getLiveNbrCells([world, y, x]), cell)
+const evolveRow = (world) => (row, y) => row.map(evolveCell(world, y))
+export const evolve = (world) => world.map(evolveRow(world))

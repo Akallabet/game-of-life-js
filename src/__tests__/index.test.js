@@ -1,5 +1,5 @@
 import { expect } from '@jest/globals'
-import { evolve, getLiveNbrCells } from '../index'
+import { evolve, getNghbrs } from '../index'
 
 it('three cells in a row [0,1,0] => [0,0,0]', () => {
   expect(evolve([[0, 1, 0]])).toEqual([[0, 0, 0]])
@@ -37,12 +37,12 @@ it('three cells in two rows [[1,0,1][0,0,0]] => [[0,0,0],[0,1,0]]', () => {
   ])
 })
 
-it('getLiveNbrCells', () => {
+it('getNghbrs', () => {
   const world = [
     [1, 0, 1],
     [0, 0, 0],
   ]
-  const liveNbrCells = getLiveNbrCells([world, 1, 1])
+  const liveNbrCells = getNghbrs([world, 1, 1])
 
   expect(liveNbrCells).toEqual(2)
 })
@@ -71,16 +71,16 @@ it('square with Tshape cells', () => {
   ])
 })
 
-it('getLiveNbrCells Tshaped', () => {
+it('getNghbrs Tshaped', () => {
   const world = [
     [1, 1, 1],
     [0, 1, 0],
     [0, 1, 0],
   ]
 
-  expect(getLiveNbrCells([world, 1, 0])).toEqual(4)
-  expect(getLiveNbrCells([world, 1, 2])).toEqual(4)
-  expect(getLiveNbrCells([world, 0, 1])).toEqual(3)
+  expect(getNghbrs([world, 1, 0])).toEqual(4)
+  expect(getNghbrs([world, 1, 2])).toEqual(4)
+  expect(getNghbrs([world, 0, 1])).toEqual(3)
 })
 
 it('square with Yshape cells', () => {

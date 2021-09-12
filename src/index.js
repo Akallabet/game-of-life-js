@@ -1,3 +1,12 @@
+const reduce = (fn, acc) => (arr) => arr.reduce(fn, acc)
+const map = (fn) => reduce((acc, value, index) => [...acc, fn(value, index)], [])
+const pipe =
+  (...fns) =>
+  (x) =>
+    fns.reduce((y, fn) => fn(y), x)
+const map2D = (fn) => map((row, y) => map((el, x) => fn(el, y, x))(row))
+const sum = (total, n) => total + n
+
 const nghbrs = [
   [0, -1],
   [0, 1],
@@ -14,11 +23,9 @@ const isAlive =
   ([ny, nx]) =>
     (world[y + ny] && world[y + ny][x + nx]) || 0
 
-export const getLiveNbrCells = (ctxt) =>
-  nghbrs.map(isAlive(ctxt)).reduce((sum, n) => sum + n, 0)
+export const getNghbrs = (ctxt) => pipe(map(isAlive(ctxt)), reduce(sum, 0))(nghbrs)
 
-const calcNextState = (liveNbrCells, cell) =>
-  liveNbrCells === 3 || (cell && liveNbrCells === 2) ? 1 : 0
-const evolveCell = (world, y) => (cell, x) => calcNextState(getLiveNbrCells([world, y, x]), cell)
-const evolveRow = (world) => (row, y) => row.map(evolveCell(world, y))
-export const evolve = (world) => world.map(evolveRow(world))
+const calcNextState = ([nbrCells, cell]) => (nbrCells === 3 || (cell && nbrCells === 2) ? 1 : 0)
+const addNeighbors = (world) => (cell, y, x) => [getNghbrs([world, y, x]), cell]
+const mapNeighbors = (world) => map2D(addNeighbors(world))(world)
+export const evolve = pipe(mapNeighbors, map2D(calcNextState))
